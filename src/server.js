@@ -1,15 +1,23 @@
 import express from "express";
-import { MongoClient } from "mongodb";
-import router from "./routes.js";
+import { connect } from "mongoose";
+import authorRouter from "../routes/author_routes.js";
+import bookRouter from "../routes/book_routes.js";
 
 const app = express();
 app.use(express.json());
 
-app.use('/api', router)
+app.use('/library', authorRouter)
+app.use('/library', bookRouter)
 
-const client = new MongoClient('mongodb://localhost:27017/');
-await client.connect();
-const db = client.db('library');
+const dbPath = 'mongodb://localhost:27017/library';
+const options = {useNewUrlParser: true, useUnifiedTopology: true}
+const mongo = connect(dbPath, options);
+
+mongo.then(() => {
+    console.log('connected');
+}, error => {
+    console.log(error, 'error');
+})
 
 app.listen(3000, () => {
     console.log("Server is listening on port 3000");
