@@ -6,6 +6,14 @@ import bookRouter from "../routes/book_routes.js";
 const app = express();
 app.use(express.json()); //request body will accept json format
 
+//cors configurations
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+});
+
 //Routes for Author & Book
 app.use('/library', authorRouter)
 app.use('/library', bookRouter)
@@ -22,6 +30,6 @@ mongo.then(() => {
 })
 
 //Specify port for node server
-app.listen(3000, () => {
+app.listen(8000, () => {
     console.log("Server is listening on port 3000");
 })
